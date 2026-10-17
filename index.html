@@ -11,6 +11,15 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <img src="./icon.svg" alt="" class="login-logo">
+      <span class="section-kicker">ورود امن</span><h1>ورود به تمرین‌یار</h1>
+      <p>نام کاربری و رمزی را که سازنده برای شما تعریف کرده وارد کنید.</p>
+      <form id="loginForm"><label>نام کاربری<input id="loginUsername" autocomplete="username" required></label><label>رمز عبور<input id="loginPassword" type="password" autocomplete="current-password" required></label><button class="primary-button">ورود</button></form>
+      <div id="loginMessage" class="login-message" role="status"></div>
+    </div>
+  </section>
   <div class="app-shell">
     <header class="hero">
       <div class="brand-row">
@@ -57,10 +66,16 @@
         <section class="section-block weekly-block">
           <div class="section-title"><div><span class="section-kicker">این هفته</span><h2>هدف‌های هفتگی</h2></div><span id="weekRange" class="week-range"></span></div>
           <div class="counter-grid">
-            <label class="counter-card"><span>هوازی</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="cardio" data-delta="-1">−</button><strong id="cardioCount">۰</strong><button data-counter="cardio" data-delta="1">+</button></div></label>
-            <label class="counter-card"><span>خودهیپنوتیزم</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="hypnosis" data-delta="-1">−</button><strong id="hypnosisCount">۰</strong><button data-counter="hypnosis" data-delta="1">+</button></div></label>
-            <label class="counter-card omega"><span>Omega 3</span><small id="omegaStatus">برنامه: ۲ تا ۴ عدد</small><div class="counter"><button data-counter="omega" data-delta="-1">−</button><strong id="omegaCount">۰</strong><button data-counter="omega" data-delta="1">+</button></div></label>
+            <label class="counter-card" data-legacy-weekly><span>هوازی</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="cardio" data-delta="-1">−</button><strong id="cardioCount">۰</strong><button data-counter="cardio" data-delta="1">+</button></div></label>
+            <label class="counter-card" data-legacy-weekly><span>خودهیپنوتیزم</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="hypnosis" data-delta="-1">−</button><strong id="hypnosisCount">۰</strong><button data-counter="hypnosis" data-delta="1">+</button></div></label>
+            <label class="counter-card omega" data-legacy-weekly><span>Omega 3</span><small id="omegaStatus">برنامه: ۲ تا ۴ عدد</small><div class="counter"><button data-counter="omega" data-delta="-1">−</button><strong id="omegaCount">۰</strong><button data-counter="omega" data-delta="1">+</button></div></label>
           </div>
+        </section>
+
+        <section class="section-block monthly-block">
+          <div class="section-title"><div><span class="section-kicker">این ماه</span><h2>هدف‌های ماهانه</h2></div><span id="monthRange" class="week-range"></span></div>
+          <div id="monthlyGrid" class="counter-grid"></div>
+          <div id="emptyMonthly" class="empty-inline">هدف ماهانه‌ای تعریف نشده است.</div>
         </section>
 
         <section class="note-card">
@@ -88,7 +103,9 @@
           <button id="backupJson" class="action-card"><span class="action-icon">↓</span><span><strong>پشتیبان کامل</strong><small>ذخیره همه داده‌ها و یادداشت‌ها</small></span></button>
           <label class="action-card"><span class="action-icon">↑</span><span><strong>بازیابی پشتیبان</strong><small>انتخاب فایل JSON قبلی</small></span><input id="restoreJson" type="file" accept="application/json" hidden></label>
         </div>
-        <div class="privacy-card"><strong>حریم خصوصی</strong><p>این نسخه حساب کاربری یا سرور داده ندارد؛ اطلاعات داخل مرورگر همین گوشی می‌ماند. پاک‌کردن داده‌های مرورگر می‌تواند اطلاعات را حذف کند، پس از بخش بالا پشتیبان بگیر.</p></div>
+        <div class="privacy-card"><strong>حریم خصوصی</strong><p>اطلاعات با حساب شما در سرور امن همگام می‌شود و سیاست‌های دسترسی اجازه می‌دهد هر کاربر فقط داده‌های خودش را مشاهده کند.</p></div>
+        <div class="privacy-card"><strong>پشتیبان ابری</strong><p id="cloudStatus">در انتظار همگام‌سازی…</p></div>
+        <button id="logoutBtn" class="secondary-button">خروج از حساب</button>
         <button id="clearData" class="danger-button">پاک‌کردن همه اطلاعات</button>
       </section>
 
@@ -98,12 +115,18 @@
         <div id="customItemList" class="manage-list"></div>
         <div id="emptyItems" class="empty-state"><strong>هنوز فعالیت شخصی نساخته‌ای</strong><span>با دکمه بالا اولین مورد را اضافه کن.</span></div>
       </section>
+
+      <section id="libraryView" class="view" aria-labelledby="libraryTab">
+        <div class="page-heading"><span class="section-kicker">راهنمای تمرین</span><h2>بانک مراقبه‌ها و تمرین‌ها</h2><p>توضیح، روش انجام و نکات احتیاطی هر تمرین را بخوان و موارد مناسب را به برنامهٔ خودت اضافه کن.</p></div>
+        <div id="libraryList" class="library-list"></div>
+      </section>
     </main>
 
     <nav class="bottom-nav" aria-label="ناوبری اصلی">
       <button id="todayTab" class="nav-item active" data-view="todayView"><span>●</span>امروز</button>
       <button id="trendTab" class="nav-item" data-view="trendView"><span>▥</span>روند</button>
       <button id="manageTab" class="nav-item" data-view="manageView"><span>＋</span>مدیریت</button>
+      <button id="libraryTab" class="nav-item" data-view="libraryView"><span>◉</span>بانک</button>
       <button id="dataTab" class="nav-item" data-view="dataView"><span>◇</span>داده‌ها</button>
     </nav>
   </div>
@@ -113,7 +136,7 @@
       <input type="hidden" id="itemId">
       <label>نام فعالیت<input id="itemName" required maxlength="60" placeholder="مثلاً مطالعه زبان"></label>
       <label>دسته‌بندی<input id="itemCategory" required maxlength="30" placeholder="تمرین، مطالعه، عادت..."></label>
-      <label>چرخه<select id="itemSchedule"><option value="daily">روزانه</option><option value="alternate">یک روز در میان</option><option value="weekly">هفتگی</option></select></label>
+      <label>چرخه<select id="itemSchedule"><option value="daily">روزانه</option><option value="alternate">یک روز در میان</option><option value="weekly">هفتگی</option><option value="monthly">ماهانه</option></select></label>
       <div class="form-row"><label>هدف<input id="itemTarget" type="number" min="1" max="9999" value="1" required></label><label>واحد<input id="itemUnit" maxlength="20" value="بار" placeholder="بار، دقیقه، صفحه..."></label></div>
       <p class="form-help">موارد روزانه با امتیاز ۰، ۰٫۵ و ۱ ثبت می‌شوند. موارد هفتگی شمارنده دارند.</p>
       <button class="primary-button" value="save">ذخیره فعالیت</button>
