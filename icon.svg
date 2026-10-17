@@ -1,7 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs><linearGradient id="chakra" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#d64747"/><stop offset=".2" stop-color="#ed8a2f"/><stop offset=".38" stop-color="#e8bd38"/><stop offset=".56" stop-color="#38a873"/><stop offset=".72" stop-color="#36a7c4"/><stop offset=".86" stop-color="#4459b8"/><stop offset="1" stop-color="#7d4aa8"/></linearGradient></defs>
-  <rect width="512" height="512" rx="120" fill="#2d2540"/>
-  <path d="M145 326c32-79 74-133 126-160 34-18 70-25 108-20-10 30-28 53-53 69-25 15-55 24-90 25 26 11 50 28 72 51-54 4-108 16-163 35Z" fill="url(#chakra)"/>
-  <circle cx="164" cy="180" r="38" fill="#f6efff"/>
-  <path d="M169 189c35 4 63 21 85 50" fill="none" stroke="#f6efff" stroke-width="18" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="کندالینی در حال بازشدن">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#49365f"/><stop offset="1" stop-color="#241d31"/></radialGradient>
+    <linearGradient id="energy" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#d64b4b"/><stop offset=".18" stop-color="#ec8738"/><stop offset=".35" stop-color="#e2b62d"/><stop offset=".52" stop-color="#36a26f"/><stop offset=".69" stop-color="#36a4c0"/><stop offset=".84" stop-color="#4d5dbc"/><stop offset="1" stop-color="#9b5dc2"/></linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#bg)"/>
+  <circle cx="256" cy="252" r="182" fill="none" stroke="#fff" stroke-opacity=".06" stroke-width="2"/>
+  <path d="M256 397C256 340 255 285 256 218C257 174 260 139 256 109" fill="none" stroke="url(#energy)" stroke-width="13" stroke-linecap="round" opacity=".92" filter="url(#glow)"/>
+  <g stroke="#fff" stroke-opacity=".75" stroke-width="3"><circle cx="256" cy="383" r="12" fill="#d64b4b"/><circle cx="256" cy="337" r="12" fill="#ec8738"/><circle cx="256" cy="291" r="12" fill="#e2b62d"/><circle cx="256" cy="245" r="12" fill="#36a26f"/><circle cx="256" cy="199" r="12" fill="#36a4c0"/><circle cx="256" cy="153" r="12" fill="#4d5dbc"/><circle cx="256" cy="107" r="12" fill="#9b5dc2"/></g>
+  <path d="M235 407C157 376 173 318 245 293C319 267 332 211 267 183C217 161 201 124 232 92" fill="none" stroke="#f5d77b" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M277 407C355 376 339 318 267 293C193 267 180 211 245 183C295 161 311 124 280 92" fill="none" stroke="#f1eff8" stroke-opacity=".82" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M222 407Q256 438 290 407Q256 389 222 407Z" fill="#d64b4b" stroke="#f7d88a" stroke-width="5"/>
+  <g transform="translate(256 89)" fill="none" stroke="#f6e9ff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"><path d="M0 0C-8-27-2-48 0-62C14-43 16-21 0 0Z" fill="#9b5dc2"/><path d="M-3 2C-30-9-43-27-50-40C-24-39-7-25-3 2Z" fill="#7358b4"/><path d="M3 2C30-9 43-27 50-40C24-39 7-25 3 2Z" fill="#b96bc1"/><path d="M-5 7C-34 12-55 4-68-3C-48-17-23-13-5 7Z" fill="#4f76bd"/><path d="M5 7C34 12 55 4 68-3C48-17 23-13 5 7Z" fill="#d077b4"/></g>
 </svg>
