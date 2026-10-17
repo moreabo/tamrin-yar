@@ -173,6 +173,16 @@
       <button class="primary-button" value="save">ذخیره و زمان‌بندی دوره</button>
     </form>
   </dialog>
+  <dialog id="libraryEditDialog" class="item-dialog">
+    <form id="libraryEditForm" method="dialog">
+      <div class="dialog-head"><div><span class="section-kicker">ویرایش بانک</span><h2 id="libraryEditTitle">ویرایش توضیحات</h2></div><button type="button" id="closeLibraryEditDialog" class="dialog-close" aria-label="بستن">×</button></div>
+      <input type="hidden" id="libraryEditId">
+      <label>توضیحات و روش انجام<textarea id="libraryEditDescription" rows="7" required maxlength="3000" placeholder="توضیح کامل و روش انجام تمرین..."></textarea></label>
+      <label>نکات احتیاطی<textarea id="libraryEditCaution" rows="4" maxlength="1500" placeholder="موارد منع یا نکات ایمنی..."></textarea></label>
+      <p class="form-help">این متن برای همه کاربران بانک تمرین‌ها نمایش داده می‌شود.</p>
+      <button class="primary-button" value="save">ذخیره توضیحات</button>
+    </form>
+  </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="./app.js" defer></script>
 </body>
