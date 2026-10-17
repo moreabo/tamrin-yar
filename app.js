@@ -1,7 +1,7 @@
 const STORAGE_PREFIX='tamrinYar.user.';
 const SESSION_KEY='tamrinYar.session';
 const SUPABASE_URL='https://tkqouzazdlqhgiaheghg.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrcW91emF6ZGxxaGdpYWhlZ2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzY3NjUsImV4cCI6MjEwNzgxMjc2NX0.wG0dPI3BmvvU35X6fAzSI1hwTPNErlAjDgCOA0h6EUI';
+const SUPABASE_KEY='sb_publishable_GJmOY7sytxmVBJ0fFjc9ZQ_mmMGRKa4';
 const builtInExercises=[
   {id:'numbers',name:'مراقبه اعداد',hint:'حداقل ۲ تکرار'},
   {id:'relax',name:'ریلکسیشن',hint:'حداقل ۱۵ دقیقه'},
