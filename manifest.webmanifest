@@ -1,0 +1,15 @@
+{
+  "name":"تمرین‌یار",
+  "short_name":"تمرین‌یار",
+  "description":"ثبت روزانه تمرین‌ها با تاریخ شمسی و امتیاز هفتگی",
+  "lang":"fa",
+  "dir":"rtl",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#faf8fc",
+  "theme_color":"#5d3fa3",
+  "icons":[
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#5d3fa3">
+  <meta name="description" content="ثبت روزانه تمرین‌ها با تاریخ شمسی و امتیاز هفتگی">
+  <title>تمرین‌یار</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true">ت</div>
+        <div>
+          <p class="eyebrow">ثبت شخصی و آفلاین</p>
+          <h1>تمرین‌یار</h1>
+        </div>
+        <button id="installBtn" class="icon-button install-button" hidden aria-label="نصب برنامه">نصب</button>
+      </div>
+      <div class="date-card">
+        <button id="nextDay" class="date-arrow" aria-label="روز بعد">‹</button>
+        <button id="dateButton" class="date-main">
+          <span id="weekday">شنبه</span>
+          <strong id="jalaliDate">۱۴۰۵/۰۷/۲۵</strong>
+        </button>
+        <button id="prevDay" class="date-arrow" aria-label="روز قبل">›</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="todayView" class="view active" aria-labelledby="todayTab">
+        <div class="score-panel">
+          <div class="score-ring" id="scoreRing" style="--score:0">
+            <div><strong id="totalScore">۰٪</strong><span>امتیاز روز</span></div>
+          </div>
+          <div class="score-copy">
+            <span class="status-pill" id="dayStatus">هنوز ثبت نشده</span>
+            <p id="scoreCaption">با یک لمس وضعیت تمرین‌ها را ثبت کن.</p>
+            <button id="goToday" class="text-button">برو به امروز</button>
+          </div>
+        </div>
+
+        <section class="section-block">
+          <div class="section-title"><div><span class="section-kicker">تمرین</span><h2>برنامه روزانه</h2></div><span id="exerciseMiniScore" class="mini-score">۰٪</span></div>
+          <div id="exerciseList" class="habit-list"></div>
+        </section>
+
+        <section class="section-block nutrition-block">
+          <div class="section-title"><div><span class="section-kicker">تغذیه</span><h2>رعایت برنامه</h2></div><span id="nutritionMiniScore" class="mini-score">۰٪</span></div>
+          <div id="nutritionList" class="habit-list"></div>
+        </section>
+
+        <section class="section-block weekly-block">
+          <div class="section-title"><div><span class="section-kicker">این هفته</span><h2>هدف‌های هفتگی</h2></div><span id="weekRange" class="week-range"></span></div>
+          <div class="counter-grid">
+            <label class="counter-card"><span>هوازی</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="cardio" data-delta="-1">−</button><strong id="cardioCount">۰</strong><button data-counter="cardio" data-delta="1">+</button></div></label>
+            <label class="counter-card"><span>خودهیپنوتیزم</span><small>هدف: ۲ بار</small><div class="counter"><button data-counter="hypnosis" data-delta="-1">−</button><strong id="hypnosisCount">۰</strong><button data-counter="hypnosis" data-delta="1">+</button></div></label>
+            <label class="counter-card omega"><span>Omega 3</span><small id="omegaStatus">برنامه: ۲ تا ۴ عدد</small><div class="counter"><button data-counter="omega" data-delta="-1">−</button><strong id="omegaCount">۰</strong><button data-counter="omega" data-delta="1">+</button></div></label>
+          </div>
+        </section>
+
+        <section class="note-card">
+          <label for="dayNote">یادداشت روز</label>
+          <textarea id="dayNote" rows="3" placeholder="حال امروز، نکته‌ای از تمرین یا هر چیزی که می‌خواهی به خاطر بسپاری..."></textarea>
+        </section>
+      </section>
+
+      <section id="trendView" class="view" aria-labelledby="trendTab">
+        <div class="page-heading"><span class="section-kicker">نمای کلی</span><h2>روند هفت روز اخیر</h2><p>امتیاز هر روز بر اساس تمرین و تغذیه محاسبه می‌شود.</p></div>
+        <div id="trendChart" class="trend-chart"></div>
+        <div class="summary-grid">
+          <article><span>میانگین ۷ روز</span><strong id="sevenDayAverage">۰٪</strong></article>
+          <article><span>روزهای ثبت‌شده</span><strong id="recordedDays">۰</strong></article>
+          <article><span>بهترین روز</span><strong id="bestDay">—</strong></article>
+          <article><span>پیوستگی</span><strong id="streakCount">۰ روز</strong></article>
+        </div>
+        <div class="history-card"><h3>روزهای اخیر</h3><div id="historyList"></div></div>
+      </section>
+
+      <section id="dataView" class="view" aria-labelledby="dataTab">
+        <div class="page-heading"><span class="section-kicker">کنترل اطلاعات</span><h2>پشتیبان و خروجی</h2><p>اطلاعات روی همین دستگاه ذخیره می‌شود. برای اطمینان، گاهی فایل پشتیبان بگیر.</p></div>
+        <div class="action-list">
+          <button id="exportCsv" class="action-card"><span class="action-icon">CSV</span><span><strong>خروجی جدول</strong><small>مناسب Excel و Google Sheets</small></span></button>
+          <button id="backupJson" class="action-card"><span class="action-icon">↓</span><span><strong>پشتیبان کامل</strong><small>ذخیره همه داده‌ها و یادداشت‌ها</small></span></button>
+          <label class="action-card"><span class="action-icon">↑</span><span><strong>بازیابی پشتیبان</strong><small>انتخاب فایل JSON قبلی</small></span><input id="restoreJson" type="file" accept="application/json" hidden></label>
+        </div>
+        <div class="privacy-card"><strong>حریم خصوصی</strong><p>این نسخه حساب کاربری یا سرور داده ندارد؛ اطلاعات داخل مرورگر همین گوشی می‌ماند. پاک‌کردن داده‌های مرورگر می‌تواند اطلاعات را حذف کند، پس از بخش بالا پشتیبان بگیر.</p></div>
+        <button id="clearData" class="danger-button">پاک‌کردن همه اطلاعات</button>
+      </section>
+
+      <section id="manageView" class="view" aria-labelledby="manageTab">
+        <div class="page-heading"><span class="section-kicker">برنامه شخصی</span><h2>مدیریت فعالیت‌ها</h2><p>تمرین، مطالعه، عادت، تغذیه یا هر فعالیت دیگری را با برنامه دلخواه تعریف کن.</p></div>
+        <button id="addItemBtn" class="primary-button">+ افزودن فعالیت جدید</button>
+        <div id="customItemList" class="manage-list"></div>
+        <div id="emptyItems" class="empty-state"><strong>هنوز فعالیت شخصی نساخته‌ای</strong><span>با دکمه بالا اولین مورد را اضافه کن.</span></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="ناوبری اصلی">
+      <button id="todayTab" class="nav-item active" data-view="todayView"><span>●</span>امروز</button>
+      <button id="trendTab" class="nav-item" data-view="trendView"><span>▥</span>روند</button>
+      <button id="manageTab" class="nav-item" data-view="manageView"><span>＋</span>مدیریت</button>
+      <button id="dataTab" class="nav-item" data-view="dataView"><span>◇</span>داده‌ها</button>
+    </nav>
+  </div>
+  <dialog id="itemDialog" class="item-dialog">
+    <form id="itemForm" method="dialog">
+      <div class="dialog-head"><div><span class="section-kicker">فعالیت شخصی</span><h2 id="dialogTitle">افزودن فعالیت</h2></div><button type="button" id="closeDialog" class="dialog-close" aria-label="بستن">×</button></div>
+      <input type="hidden" id="itemId">
+      <label>نام فعالیت<input id="itemName" required maxlength="60" placeholder="مثلاً مطالعه زبان"></label>
+      <label>دسته‌بندی<input id="itemCategory" required maxlength="30" placeholder="تمرین، مطالعه، عادت..."></label>
+      <label>چرخه<select id="itemSchedule"><option value="daily">روزانه</option><option value="alternate">یک روز در میان</option><option value="weekly">هفتگی</option></select></label>
+      <div class="form-row"><label>هدف<input id="itemTarget" type="number" min="1" max="9999" value="1" required></label><label>واحد<input id="itemUnit" maxlength="20" value="بار" placeholder="بار، دقیقه، صفحه..."></label></div>
+      <p class="form-help">موارد روزانه با امتیاز ۰، ۰٫۵ و ۱ ثبت می‌شوند. موارد هفتگی شمارنده دارند.</p>
+      <button class="primary-button" value="save">ذخیره فعالیت</button>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
