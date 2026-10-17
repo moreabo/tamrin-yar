@@ -29,7 +29,7 @@ let syncTimer=null;
 
 function freshData(){return{days:{},weeks:{},months:{},settings:{customItems:[],showLegacyDefaults:false}}}
 function userStorageKey(){return session?.user?.id?`${STORAGE_PREFIX}${session.user.id}`:null}
-function isOwnerSession(){return session?.username==='moreabo'||session?.user?.email==='moreabo@users.tamrinyar.app'}
+function isOwnerSession(){return session?.user?.id==='cf8ce293-e32f-4a79-b735-ea1472952c72'||session?.username==='moreabo'||session?.user?.email==='moreabo@users.tamrinyar.app'}
 function legacyMigrationKey(){return session?.user?.id?`tamrinYar.legacyMigrated.${session.user.id}`:null}
 function takeOwnerLegacyData(){const marker=legacyMigrationKey();if(!isOwnerSession()||!marker||localStorage.getItem(marker))return null;let legacy;try{legacy=JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY))}catch{}localStorage.setItem(marker,'1');if(!legacy)return null;legacy=loadCloudShape(legacy);legacy.settings.showLegacyDefaults=true;return legacy}
 function saveLocalData(){const key=userStorageKey();if(key)localStorage.setItem(key,JSON.stringify(data))}
