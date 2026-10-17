@@ -1,8 +1,7 @@
-const STORAGE_KEY='tamrinYar.v1';
+const STORAGE_PREFIX='tamrinYar.user.';
 const SESSION_KEY='tamrinYar.session';
 const SUPABASE_URL='https://tkqouzazdlqhgiaheghg.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrcW91emF6ZGxxaGdpYWhlZ2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzY3NjUsImV4cCI6MjEwNzgxMjc2NX0.wG0dPI3BmvvU35X6fAzSI1hwTPNErlAjDgCOA0h6EUI';
-const hadStoredData=localStorage.getItem(STORAGE_KEY)!==null;
 const builtInExercises=[
   {id:'numbers',name:'مراقبه اعداد',hint:'حداقل ۲ تکرار'},
   {id:'relax',name:'ریلکسیشن',hint:'حداقل ۱۵ دقیقه'},
@@ -22,14 +21,16 @@ const builtInNutrition=[
 const anchor=new Date('2026-10-17T12:00:00');
 let selectedDate=startOfDay(new Date());
 let deferredInstall=null;
-let data=loadData();
 let session=loadSession();
+let data=freshData();
 let libraryItems=[];
 let syncTimer=null;
 
-function loadData(){let value;try{value=JSON.parse(localStorage.getItem(STORAGE_KEY))}catch{}value=value||{days:{},weeks:{},months:{}};value.days=value.days||{};value.weeks=value.weeks||{};value.months=value.months||{};value.settings=value.settings||{customItems:[]};value.settings.customItems=value.settings.customItems||[];if(value.settings.showLegacyDefaults===undefined)value.settings.showLegacyDefaults=hadStoredData&&Object.keys(value.days).length>0;return value}
+function freshData(){return{days:{},weeks:{},months:{},settings:{customItems:[],showLegacyDefaults:false}}}
+function userStorageKey(){return session?.user?.id?`${STORAGE_PREFIX}${session.user.id}`:null}
+function saveLocalData(){const key=userStorageKey();if(key)localStorage.setItem(key,JSON.stringify(data))}
 function loadSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY))}catch{return null}}
-function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));if(session){clearTimeout(syncTimer);syncTimer=setTimeout(syncCloud,700)}}
+function saveData(){saveLocalData();if(session){clearTimeout(syncTimer);syncTimer=setTimeout(syncCloud,700)}}
 function startOfDay(d){const x=new Date(d);x.setHours(12,0,0,0);return x}
 function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function faNum(v){return String(v).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
@@ -81,13 +82,13 @@ function authHeaders(token=session?.access_token){return{'apikey':SUPABASE_KEY,'
 async function refreshSession(){if(!session?.refresh_token)return false;const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});if(!res.ok)return false;const next=await res.json();session={...session,...next};localStorage.setItem(SESSION_KEY,JSON.stringify(session));return true}
 async function cloudRequest(path,options={},retry=true){let res=await fetch(`${SUPABASE_URL}${path}`,{...options,headers:{...authHeaders(),...(options.headers||{})}});if(res.status===401&&retry&&await refreshSession())res=await cloudRequest(path,options,false);return res}
 async function login(username,password){const safe=username.trim().toLowerCase();if(!/^[a-z0-9._-]{3,32}$/.test(safe))throw new Error('نام کاربری باید ۳ تا ۳۲ حرف لاتین یا عدد باشد.');const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:`${safe}@users.tamrinyar.app`,password})});if(!res.ok)throw new Error('نام کاربری یا رمز عبور صحیح نیست.');session=await res.json();session.username=safe;localStorage.setItem(SESSION_KEY,JSON.stringify(session));await startSession()}
-async function loadCloud(){const res=await cloudRequest(`/rest/v1/user_data?select=data&user_id=eq.${session.user.id}`);if(!res.ok)throw new Error('دریافت اطلاعات ناموفق بود');const rows=await res.json();if(rows[0]?.data){data=rows[0].data;data=loadCloudShape(data);localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}else await syncCloud();renderToday()}
+async function loadCloud(){const res=await cloudRequest(`/rest/v1/user_data?select=data&user_id=eq.${session.user.id}`);if(!res.ok)throw new Error('دریافت اطلاعات ناموفق بود');const rows=await res.json();if(rows[0]?.data){data=loadCloudShape(rows[0].data);saveLocalData()}else{data=freshData();saveLocalData();await syncCloud()}renderToday()}
 function loadCloudShape(value){value.days=value.days||{};value.weeks=value.weeks||{};value.months=value.months||{};value.settings=value.settings||{};value.settings.customItems=value.settings.customItems||[];value.settings.showLegacyDefaults=value.settings.showLegacyDefaults===true;return value}
 async function syncCloud(){if(!session)return;const status=document.getElementById('cloudStatus');if(status)status.textContent='در حال همگام‌سازی…';try{const res=await cloudRequest('/rest/v1/user_data?on_conflict=user_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:session.user.id,data,updated_at:new Date().toISOString()})});if(!res.ok)throw new Error();await dailyBackup();if(status)status.textContent=`آخرین همگام‌سازی: ${new Intl.DateTimeFormat('fa-IR',{hour:'2-digit',minute:'2-digit'}).format(new Date())}`}catch{if(status)status.textContent='همگام‌سازی ناموفق؛ اطلاعات روی دستگاه محفوظ است.'}}
-async function dailyBackup(){const today=iso(new Date());if(data.settings.lastCloudBackup===today)return;const res=await cloudRequest('/rest/v1/daily_backups?on_conflict=user_id,backup_date',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:session.user.id,backup_date:today,data})});if(res.ok){data.settings.lastCloudBackup=today;localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}}
+async function dailyBackup(){const today=iso(new Date());if(data.settings.lastCloudBackup===today)return;const res=await cloudRequest('/rest/v1/daily_backups?on_conflict=user_id,backup_date',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:session.user.id,backup_date:today,data})});if(res.ok){data.settings.lastCloudBackup=today;saveLocalData()}}
 async function loadLibrary(){const res=await cloudRequest('/rest/v1/exercise_library?select=*&order=title_fa');if(res.ok){libraryItems=await res.json();renderLibrary()}}
 async function startSession(){const message=document.getElementById('loginMessage');message.textContent='در حال آماده‌سازی اطلاعات…';await Promise.all([loadCloud(),loadLibrary()]);await dailyBackup();document.getElementById('appShell').hidden=false;document.getElementById('loginScreen').hidden=true;message.textContent=''}
-function logout(){session=null;localStorage.removeItem(SESSION_KEY);document.getElementById('loginPassword').value='';document.getElementById('appShell').hidden=true;document.getElementById('loginScreen').hidden=false}
+function logout(){session=null;data=freshData();localStorage.removeItem(SESSION_KEY);document.getElementById('loginPassword').value='';document.getElementById('appShell').hidden=true;document.getElementById('loginScreen').hidden=false}
 
 document.addEventListener('click',e=>{const score=e.target.closest('.score-button');if(score)setScore(score.dataset.id,score.dataset.score);const counter=e.target.closest('[data-counter]');if(counter)changeCounter(counter.dataset.counter,Number(counter.dataset.delta));const monthCounter=e.target.closest('[data-month-counter]');if(monthCounter)changeMonthCounter(monthCounter.dataset.monthCounter,Number(monthCounter.dataset.delta));const nav=e.target.closest('.nav-item');if(nav)switchView(nav.dataset.view);const edit=e.target.closest('[data-edit-item]');if(edit)openItemDialog(edit.dataset.editItem);const archive=e.target.closest('[data-archive-item]');if(archive)archiveItem(archive.dataset.archiveItem);const remove=e.target.closest('[data-delete-item]');if(remove)deleteItem(remove.dataset.deleteItem);const add=e.target.closest('[data-add-library]');if(add)addFromLibrary(add.dataset.addLibrary)});
 document.getElementById('prevDay').onclick=()=>{selectedDate=addDays(selectedDate,-1);renderToday()};document.getElementById('nextDay').onclick=()=>{selectedDate=addDays(selectedDate,1);renderToday()};document.getElementById('goToday').onclick=()=>{selectedDate=startOfDay(new Date());renderToday()};document.getElementById('dateButton').onclick=()=>{selectedDate=startOfDay(new Date());renderToday()};
