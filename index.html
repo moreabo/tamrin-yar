@@ -105,6 +105,16 @@
         </div>
         <div class="privacy-card"><strong>حریم خصوصی</strong><p>اطلاعات با حساب شما در سرور امن همگام می‌شود و سیاست‌های دسترسی اجازه می‌دهد هر کاربر فقط داده‌های خودش را مشاهده کند.</p></div>
         <div class="privacy-card"><strong>پشتیبان ابری</strong><p id="cloudStatus">در انتظار همگام‌سازی…</p></div>
+        <section class="reminder-card">
+          <div class="section-title"><div><span class="section-kicker">یادآوری هوشمند</span><h2>اعلان کارهای انجام‌نشده</h2></div></div>
+          <label class="toggle-row"><span><strong>اعلان روزانه</strong><small>تمرین‌های انجام‌نشده امروز</small></span><input id="dailyReminderEnabled" type="checkbox"></label>
+          <label class="time-row">ساعت یادآوری روزانه<input id="dailyReminderTime" type="time" value="21:00"></label>
+          <label class="toggle-row"><span><strong>جمع‌بندی هفتگی</strong><small>یادآوری هدف‌های ناقص هفته</small></span><input id="weeklyReminderEnabled" type="checkbox"></label>
+          <label class="toggle-row"><span><strong>جمع‌بندی ماهانه</strong><small>یادآوری هدف‌های ناقص ماه</small></span><input id="monthlyReminderEnabled" type="checkbox"></label>
+          <label class="toggle-row"><span><strong>یادآوری دوره‌ها</strong><small>تمرین‌های امروز دوره یا چله</small></span><input id="courseReminderEnabled" type="checkbox"></label>
+          <button id="enableNotifications" class="primary-button" type="button">فعال‌کردن اعلان در این دستگاه</button>
+          <p id="notificationStatus" class="form-help">برای دریافت اعلان، اجازهٔ سیستم لازم است.</p>
+        </section>
         <button id="logoutBtn" class="secondary-button">خروج از حساب</button>
         <button id="clearData" class="danger-button">پاک‌کردن همه اطلاعات</button>
       </section>
@@ -120,11 +130,19 @@
         <div class="page-heading"><span class="section-kicker">راهنمای تمرین</span><h2>بانک مراقبه‌ها و تمرین‌ها</h2><p>توضیح، روش انجام و نکات احتیاطی هر تمرین را بخوان و موارد مناسب را به برنامهٔ خودت اضافه کن.</p></div>
         <div id="libraryList" class="library-list"></div>
       </section>
+
+      <section id="coursesView" class="view" aria-labelledby="coursesTab">
+        <div class="page-heading"><span class="section-kicker">مسیرهای زمان‌دار</span><h2>دوره‌ها و چله‌ها</h2><p>یک دوره با تعداد روز مشخص بساز و تمرین‌های هر روز آن را دنبال کن.</p></div>
+        <button id="addCourseBtn" class="primary-button">+ ساخت دوره جدید</button>
+        <div id="courseList" class="course-list"></div>
+        <div id="emptyCourses" class="empty-state"><strong>هنوز دوره‌ای نساخته‌ای</strong><span>مثلاً یک چلهٔ ۴۰ روزه با تمرین‌های روزانه بساز.</span></div>
+      </section>
     </main>
 
     <nav class="bottom-nav" aria-label="ناوبری اصلی">
       <button id="todayTab" class="nav-item active" data-view="todayView"><span>●</span>امروز</button>
       <button id="trendTab" class="nav-item" data-view="trendView"><span>▥</span>روند</button>
+      <button id="coursesTab" class="nav-item" data-view="coursesView"><span>◷</span>دوره‌ها</button>
       <button id="manageTab" class="nav-item" data-view="manageView"><span>＋</span>مدیریت</button>
       <button id="libraryTab" class="nav-item" data-view="libraryView"><span>◉</span>بانک</button>
       <button id="dataTab" class="nav-item" data-view="dataView"><span>◇</span>داده‌ها</button>
@@ -140,6 +158,19 @@
       <div class="form-row"><label>هدف<input id="itemTarget" type="number" min="1" max="9999" value="1" required></label><label>واحد<input id="itemUnit" maxlength="20" value="بار" placeholder="بار، دقیقه، صفحه..."></label></div>
       <p class="form-help">موارد روزانه با امتیاز ۰، ۰٫۵ و ۱ ثبت می‌شوند. موارد هفتگی شمارنده دارند.</p>
       <button class="primary-button" value="save">ذخیره فعالیت</button>
+    </form>
+  </dialog>
+  <dialog id="courseDialog" class="item-dialog">
+    <form id="courseForm" method="dialog">
+      <div class="dialog-head"><div><span class="section-kicker">دوره زمان‌دار</span><h2>ساخت دوره یا چله</h2></div><button type="button" id="closeCourseDialog" class="dialog-close" aria-label="بستن">×</button></div>
+      <input type="hidden" id="courseId">
+      <label>نام دوره<input id="courseTitle" required maxlength="60" placeholder="مثلاً چله پاکسازی"></label>
+      <div class="form-row"><label>تعداد روز<input id="courseDuration" type="number" min="1" max="365" value="40" required></label><label>تاریخ شروع<input id="courseStart" type="date" required></label></div>
+      <label>الگوی اجرا<select id="coursePattern"><option value="daily">هر روز</option><option value="odd">روزهای فرد دوره</option><option value="even">روزهای زوج دوره</option><option value="weekdays">روزهای مشخص هفته</option></select></label>
+      <div id="courseWeekdays" class="weekday-picks" hidden><label><input type="checkbox" value="6">شنبه</label><label><input type="checkbox" value="0">یکشنبه</label><label><input type="checkbox" value="1">دوشنبه</label><label><input type="checkbox" value="2">سه‌شنبه</label><label><input type="checkbox" value="3">چهارشنبه</label><label><input type="checkbox" value="4">پنجشنبه</label><label><input type="checkbox" value="5">جمعه</label></div>
+      <label>تمرین‌های داخل دوره<textarea id="courseItems" rows="6" required placeholder="هر تمرین را در یک خط بنویسید&#10;مراقبه ۲۰ دقیقه&#10;تنفس آگاهانه&#10;مطالعه"></textarea></label>
+      <label>توضیحات<textarea id="courseDescription" rows="2" placeholder="هدف و توضیح دوره..."></textarea></label>
+      <button class="primary-button" value="save">ذخیره و زمان‌بندی دوره</button>
     </form>
   </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
