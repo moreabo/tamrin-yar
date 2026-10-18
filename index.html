@@ -159,9 +159,11 @@
       <input type="hidden" id="itemId">
       <label>نام فعالیت<input id="itemName" required maxlength="60" placeholder="مثلاً مطالعه زبان"></label>
       <label>دسته‌بندی<input id="itemCategory" required maxlength="30" placeholder="تمرین، مطالعه، عادت..."></label>
+      <label>توضیحات و روش انجام<textarea id="itemDescription" rows="3" maxlength="1000" placeholder="جزئیات، مراحل یا نکته‌های این فعالیت..."></textarea></label>
       <label>چرخه<select id="itemSchedule"><option value="daily">روزانه</option><option value="alternate">یک روز در میان</option><option value="weekly">هفتگی</option><option value="monthly">ماهانه</option></select></label>
+      <div class="form-row"><label>ساعت اجرا<input id="itemTime" type="time"></label><label>روش ثبت<select id="itemScoreType"><option value="tri">نشد / ناقص / کامل</option><option value="binary">انجام شد / نشد</option><option value="five">امتیاز ۱ تا ۵</option><option value="counter">شمارنده</option><option value="duration">مدت‌زمان</option></select></label></div>
       <div class="form-row"><label>هدف<input id="itemTarget" type="number" min="1" max="9999" value="1" required></label><label>واحد<input id="itemUnit" maxlength="20" value="بار" placeholder="بار، دقیقه، صفحه..."></label></div>
-      <p class="form-help">موارد روزانه با امتیاز ۰، ۰٫۵ و ۱ ثبت می‌شوند. موارد هفتگی شمارنده دارند.</p>
+      <p class="form-help">عنوان، توضیحات، ساعت، هدف، واحد و روش ثبت هر زمان از بخش مدیریت قابل ویرایش است.</p>
       <button class="primary-button" value="save">ذخیره فعالیت</button>
     </form>
   </dialog>
