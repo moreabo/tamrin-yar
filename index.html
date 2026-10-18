@@ -63,6 +63,11 @@
           <div id="nutritionList" class="habit-list"></div>
         </section>
 
+        <section id="todayCoursesSection" class="section-block course-today-block" hidden>
+          <div class="section-title"><div><span class="section-kicker">دوره‌ها</span><h2>برنامه دوره‌های امروز</h2></div><span id="todayCoursesCount" class="mini-score">۰</span></div>
+          <div id="todayCoursesList" class="today-course-list"></div>
+        </section>
+
         <section class="section-block weekly-block">
           <div class="section-title"><div><span class="section-kicker">این هفته</span><h2>هدف‌های هفتگی</h2></div><span id="weekRange" class="week-range"></span></div>
           <div class="counter-grid">
@@ -166,9 +171,10 @@
       <input type="hidden" id="courseId">
       <label>نام دوره<input id="courseTitle" required maxlength="60" placeholder="مثلاً چله پاکسازی"></label>
       <div class="form-row"><label>تعداد روز<input id="courseDuration" type="number" min="1" max="365" value="40" required></label><label>تاریخ شروع<input id="courseStart" type="date" required></label></div>
-      <label>الگوی اجرا<select id="coursePattern"><option value="daily">هر روز</option><option value="odd">روزهای فرد دوره</option><option value="even">روزهای زوج دوره</option><option value="weekdays">روزهای مشخص هفته</option></select></label>
+      <label>الگوی پیشنهادی زیرتمرین جدید<select id="coursePattern"><option value="daily">هر روز</option><option value="odd">روزهای فرد دوره</option><option value="even">روزهای زوج دوره</option><option value="weekdays">روزهای مشخص هفته</option></select></label>
       <div id="courseWeekdays" class="weekday-picks" hidden><label><input type="checkbox" value="6">شنبه</label><label><input type="checkbox" value="0">یکشنبه</label><label><input type="checkbox" value="1">دوشنبه</label><label><input type="checkbox" value="2">سه‌شنبه</label><label><input type="checkbox" value="3">چهارشنبه</label><label><input type="checkbox" value="4">پنجشنبه</label><label><input type="checkbox" value="5">جمعه</label></div>
-      <label>تمرین‌های داخل دوره<textarea id="courseItems" rows="6" required placeholder="هر تمرین را در یک خط بنویسید&#10;مراقبه ۲۰ دقیقه&#10;تنفس آگاهانه&#10;مطالعه"></textarea></label>
+      <div class="course-builder-head"><div><strong>زیرتمرین‌های دوره</strong><small>زمان‌بندی و روش امتیازدهی هر مورد مستقل است.</small></div><button type="button" id="addCourseItemBtn">+ زیرتمرین</button></div>
+      <div id="courseItemBuilder" class="course-item-builder"></div>
       <label>توضیحات<textarea id="courseDescription" rows="2" placeholder="هدف و توضیح دوره..."></textarea></label>
       <button class="primary-button" value="save">ذخیره و زمان‌بندی دوره</button>
     </form>
